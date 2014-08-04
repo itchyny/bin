@@ -1,0 +1,6 @@
+#!/bin/sh
+while ps $1 > /dev/null; do
+  sleep 1
+done
+shift
+exec $@
