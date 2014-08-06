@@ -2,6 +2,6 @@
 _after ()
 {
   local -a list
-  list=( ${(if)"$(ps | sed '1d' | sed '/ps/d' | sed '/sed/d' | sed 's/^ *//' | sed 's/ [^ ]* *[^ ]* *-*/ /' | tr ':' ' ' | sed 's/ /:/')"} )
+  list=( ${(if)"$(ps -a | sed '1d' | sed '/ps/d' | sed '/sed/d' | sed 's/^ *//' | sed 's/ [^ ]* *[^ ]* *-*/ /' | tr ':' ' ' | sed 's/ /:/')"} )
   _describe -t 'pids' 'pid' list && ret=0
 }
