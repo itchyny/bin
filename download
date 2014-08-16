@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ $# -eq 0 ]; then
+  exit 0
+elif echo "$1" | grep github > /dev/null 2>&1; then
+  git clone "$1"
+elif command -v wget > /dev/null 2>&1; then
+  wget --no-check-certificate --user-agent=download "$1"
+elif command -v curl > /dev/null 2>&1; then
+  curl -OR "$1"
+fi
+shift; $0 "$@"
