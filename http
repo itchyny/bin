@@ -12,6 +12,4 @@ elif command -v php > /dev/null 2>&1 && php -v | grep -qm1 'PHP 5\.[45]\.'; then
   php -S 0.0.0.0:8000
 elif command -v plackup > /dev/null 2>&1; then
   plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root => ".")->to_app'
-elif command -v erl > /dev/null 2>&1; then
-  erl -eval 'inets:start(), inets:start(httpd, [{server_name, "httpd"}, {server_root, "."}, {document_root, "."}, {port, 8000}])'
 fi
