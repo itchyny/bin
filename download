@@ -8,4 +8,5 @@ elif command -v wget > /dev/null 2>&1; then
 elif command -v curl > /dev/null 2>&1; then
   curl -OR "$1"
 fi
-shift; $0 "$@"
+shift
+$0 "$@"
