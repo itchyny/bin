@@ -1,0 +1,13 @@
+#!/bin/sh
+file=$1
+shift
+commands="$@"
+oldtime=0
+while true; do
+  newtime=$(perl -MPOSIX -le 'print strftime "%s", localtime((lstat)[9]) for @ARGV' "$file")
+  if [ "$oldtime" != "0" ] && [ "$newtime" != "$oldtime" ]; then
+    eval "$commands"
+  fi
+  oldtime=$newtime
+  sleep 3
+done
