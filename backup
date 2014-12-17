@@ -1,0 +1,24 @@
+#!/bin/sh
+src=~/Dropbox
+pic=~/Pictures
+if ! [ -d "$src" ]; then
+  exit 1
+fi
+if [ -d "$src/.dropbox.cache" ]; then
+  rm -rf "$src/.dropbox.cache"
+fi
+if [ -f "$src/.dropbox" ]; then
+  rm -f "$src/.dropbox"
+fi
+for dir in /media/* /media/$(whoami)/* /Volumes/*; do
+  targ=$dir/Dropbox
+  if [ -d "$targ" ]; then
+    echo "Start backup from $src to $targ."
+    rsync -av --delete "$src/" "$targ/"
+  fi
+  targ=$dir/Pictures
+  if [ -d "$targ" ] && [ -d "$pic" ]; then
+    echo "Start backup from $pic to $targ."
+    rsync -av "$pic/" "$targ/"
+  fi
+done
