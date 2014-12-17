@@ -1,0 +1,21 @@
+#!/bin/sh
+if [ $# -eq 0 ]; then
+  for dir in /media/* /media/$(whoami)/* /Volumes/*; do
+    linkdir=$(readlink "$dir")
+    if [ -d "$dir" ] && [ "$linkdir" != "/" ] && [ "$dir" != "/media/$(whoami)" ]; then
+      echo "$dir"
+      $0 "$dir"
+    fi
+  done
+else
+  echo "Ejecting $1."
+  if [ "$(uname)" = "Darwin" ]; then
+    sudo diskutil umount "$1"
+  elif [ -x /usr/bin/eject ]; then
+    sudo /usr/bin/eject "$1"
+  fi
+  if [ $# -ge 2 ]; then
+    shift
+    $0 "$@"
+  fi
+fi
