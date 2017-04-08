@@ -18,4 +18,6 @@ fi
 
 echo "Switching git origin: $ORIGIN -> $NEW_ORIGIN"
 git remote set-url origin "$NEW_ORIGIN"
-git branch --set-upstream-to=origin/master master
+if git branch | grep master > /dev/null 2>&1; then
+  git branch --set-upstream-to=origin/master master
+fi
