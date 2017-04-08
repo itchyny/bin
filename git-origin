@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+ORIGIN=$(git remote get-url origin 2>/dev/null)
+
+if [ "$ORIGIN" = "" ]; then
+  echo "fatal: Not a git repository" > /dev/stderr
+  exit 1
+fi
+
+if [[ "$ORIGIN" == "git@"* ]]; then
+  NEW_ORIGIN=$(echo "$ORIGIN" | sed -e "s|^git@\([^:]*\):|https://\1/|" -e "s|.git$||")
+elif [[ "$ORIGIN" == "https://"* ]]; then
+  NEW_ORIGIN=$(echo "$ORIGIN" | sed -e "s|https://\([^/]*\)/|git@\1:|").git
+else
+  echo "fatal: Unknown origin pattern: $ORIGIN" > /dev/stderr
+  exit 1
+fi
+
+echo "Switching git origin: $ORIGIN -> $NEW_ORIGIN"
+git remote set-url origin "$NEW_ORIGIN"
+git branch --set-upstream-to=origin/master master
