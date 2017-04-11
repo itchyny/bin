@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+INTERVAL=600
+if [[ "$1" = "--interval" ]] && shift; then
+  INTERVAL="$1" && shift
+fi
+
 kill_proc() {
   if kill -0 "$2" >/dev/null 2>&1; then
     disown "$2"
@@ -26,7 +31,7 @@ while true; do
   sh -c "$*" &
   PID="$!"
   i=0
-  while kill -0 "$PID" >/dev/null 2>&1 && test "$i" -lt 300; do
+  while kill -0 "$PID" >/dev/null 2>&1 && test "$i" -lt "$INTERVAL"; do
     sleep 1
     i=$((i + 1))
   done
