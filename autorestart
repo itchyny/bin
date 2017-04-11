@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+kill_proc() {
+  if kill -0 "$2" >/dev/null 2>&1; then
+    disown "$2"
+    # PGID=$(ps -o pgid= "$2" | tr -d ' ')
+    # echo $PGID
+    # echo $$
+    # TODO: kill process group?
+    kill -"$1" "$2" >/dev/null 2>&1 || true
+  fi
+}
+
+clean_up() {
+  kill_proc 9 "$PID"
+  while kill -0 "$PID" >/dev/null 2>&1; do
+    sleep 1
+  done
+  exit "$(wait "$PID"; echo $?)"
+}
+trap clean_up SIGHUP SIGINT SIGQUIT SIGTERM
+
+while true; do
+  echo "$@"
+  # TODO: setsid?
+  sh -c "$*" &
+  PID="$!"
+  i=0
+  while kill -0 "$PID" >/dev/null 2>&1 && test "$i" -lt 300; do
+    sleep 1
+    i=$((i + 1))
+  done
+  kill_proc 9 "$PID"
+done
