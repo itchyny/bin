@@ -10,7 +10,7 @@ fi
 if [[ "$ORIGIN" == "git@"* ]]; then
   NEW_ORIGIN=$(echo "$ORIGIN" | sed -e "s|^git@\([^:]*\):|https://\1/|" -e "s|.git$||")
 elif [[ "$ORIGIN" == "https://"* ]]; then
-  NEW_ORIGIN=$(echo "$ORIGIN" | sed -e "s|https://\([^/]*\)/|git@\1:|").git
+  NEW_ORIGIN=$(echo "$ORIGIN" | sed -e "s|https://\([^/]*\)/|git@\1:|" -e "s|.git$||").git
 else
   echo "fatal: Unknown origin pattern: $ORIGIN" > /dev/stderr
   exit 1
