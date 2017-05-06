@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 while IFS= read -r -d '' file; do
-  mtime=$(git log -1 --format=%ci "$file")
-  t=$(echo "$mtime" | sed 's/[-+][0-9]*$//' | sed 's/[-: ]//g' | sed 's/\(..\)$/.\1/')
-  echo "$(printf "%-80s" "$file")"$'\t'"$mtime"
+  mtime=$(git log -1 --format=%cI "$file")
+  t=$(gdate -d "$mtime" +%Y%m%d%H%M.%S)
+  echo "$(printf "%-80s" "$file")"$'\t'"$mtime"$'\t'"$t"
   touch -at "$t" -mt "$t" "$file"
 done < <(git ls-files -z)
