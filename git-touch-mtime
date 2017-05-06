@@ -10,5 +10,5 @@ while IFS= read -r -d '' file; do
   mtime=$(git log -1 --format=%ci "$file")
   t=$("$DATE" -d "$mtime" +%Y%m%d%H%M.%S)
   echo "$(printf "%-80s" "$file")"$'\t'"$mtime"$'\t'"$t"
-  touch -at "$t" -mt "$t" "$file"
+  touch -t "$t" "$file"
 done < <(git ls-files -z)
