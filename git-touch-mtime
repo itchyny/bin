@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+if command -v gdate >/dev/null 2>&1; then
+  DATE=gdate
+else
+  DATE=date
+fi
+
 while IFS= read -r -d '' file; do
-  mtime=$(git log -1 --format=%cI "$file")
-  t=$(gdate -d "$mtime" +%Y%m%d%H%M.%S)
+  mtime=$(git log -1 --format=%ci "$file")
+  t=$("$DATE" -d "$mtime" +%Y%m%d%H%M.%S)
   echo "$(printf "%-80s" "$file")"$'\t'"$mtime"$'\t'"$t"
   touch -at "$t" -mt "$t" "$file"
 done < <(git ls-files -z)
