@@ -9,6 +9,9 @@ fi
 while IFS= read -r -d '' file; do
   logtime=$(git log -1 --format=%ci "$file")
   mtime=$("$DATE" -d "$logtime" +%Y%m%d%H%M.%S)
+  if [ X"$mtime" = "X" ]; then
+    exit 1
+  fi
   echo "$(printf "%-80s" "$file")"$'\t'"$logtime"$'\t'"$mtime"
   touch -t "$mtime" "$file"
 done < <(git ls-files -z)
