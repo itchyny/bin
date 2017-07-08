@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+  echo "No hosts" > /dev/stderr
+  exit 1
+fi
+file="$1"
+shift
+hosts=("$@")
+
+for host in "${hosts[@]}"; do
+  scp -q "$host:$file" /dev/stdout 2>/dev/null
+done
