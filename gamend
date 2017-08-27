@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+  echo "input commit message" > /dev/stderr
+  exit 1
+fi
+
+message="$1"
+shift
+for m in "$@"; do
+  message="$message $m"
+done
+
+git commit --amend -m "$message"
