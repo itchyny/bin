@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+branch-exists() {
+  git rev-parse "origin/$1" >/dev/null 2>&1
+}
+
+rebase-onto() {
+  git rebase --onto "origin/$1" $(git log --merges --oneline -1 --format=%H)
+}
+
+if branch-exists develop; then
+  rebase-onto develop
+elif branch-exists master; then
+  rebase-onto master
+else
+  echo "Unknown main branch: cannot find develop and master" >/dev/stderr
+  exit 1
+fi
+
