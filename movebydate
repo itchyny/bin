@@ -1,0 +1,8 @@
+#!/bin/bash
+set -eux
+
+for f in "$@"; do
+  d=$(stat -f %SB -t %Y-%m-%d "$f")
+  mkdir -p "$d"
+  mv -f "$f" "$d"
+done
