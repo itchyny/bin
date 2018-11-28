@@ -2,7 +2,9 @@
 if [ $# -eq 0 ]; then
   for dir in /media/* /media/$(whoami)/* /Volumes/*; do
     linkdir=$(readlink "$dir")
-    if [ -d "$dir" ] && [ "$linkdir" != "/" ] && [ "$dir" != "/media/$(whoami)" ]; then
+    if [ -d "$dir" ] && [ "$linkdir" != "/" ] && \
+      [ "$dir" != "/media/$(whoami)" ] && \
+      [ "$dir" != "/Volumes/Preboot" ]; then
       echo "$dir"
       $0 "$dir"
     fi
