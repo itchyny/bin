@@ -1,5 +1,10 @@
 #!/bin/sh
+set -eux
+
 src=~/Dropbox
+if ! [ -d "$src" ]; then
+  src=~/Documents/Dropbox
+fi
 pic=~/Pictures
 if ! [ -d "$src" ]; then
   exit 1
