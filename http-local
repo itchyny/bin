@@ -1,15 +1,21 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Ref: http://blog.kamipo.net/entry/2013/02/20/122225
-if command -v python > /dev/null 2>&1; then
+
+port=8000
+while netstat -vanp tcp | grep "$port" >/dev/null 2>&1; do
+  port=$((port + 1))
+done
+
+if command -v python >/dev/null 2>&1; then
   if python -V 2>&1 | grep -qm1 'Python 3\.'; then
-    python -m http.server 8000
+    python -m http.server $port
   else
-    python -m SimpleHTTPServer 8000
+    python -m SimpleHTTPServer $port
   fi
-elif command -v ruby > /dev/null 2>&1; then
-  ruby -rwebrick -e 'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => ".").start'
-elif command -v php > /dev/null 2>&1 && php -v | grep -qm1 'PHP 5\.[45]\.'; then
-  php -S 0.0.0.0:8000
-elif command -v plackup > /dev/null 2>&1; then
+elif command -v ruby >/dev/null 2>&1; then
+  ruby -rwebrick -e "WEBrick::HTTPServer.new(:Port => $port, :DocumentRoot => '.').start"
+elif command -v php >/dev/null 2>&1 && php -v | grep -qm1 'PHP 5\.[45]\.'; then
+  php -S 0.0.0.0:$port
+elif command -v plackup >/dev/null 2>&1; then
   plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root => ".")->to_app'
 fi
