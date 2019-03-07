@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eux
+
+if command -v brew >/dev/null 2>&1; then
+  brew update
+  brew upgrade
+  brew cleanup
+  brew doctor
+fi
+
+if command -v miv >/dev/null 2>&1; then
+  miv update
+fi
+
+if command -v rustup >/dev/null 2>&1; then
+  rustup update stable
+fi
+
+if command -v stack >/dev/null 2>&1; then
+  stack update
+  stack upgrade
+  stack clean
+fi
