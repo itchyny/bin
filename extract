@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eu
+
+if [ $# -ne 1 ]; then
+  echo "extract: specify target file" > /dev/stderr
+  exit 1
+fi
+
+target=$1
+
+case $target in
+  *.tar.gz|*.tgz) tar xzvf "$target";;
+  *.tar.xz) tar Jxvf "$target";;
+  *.zip) unzip "$target";;
+  *.lzh) lha e "$target";;
+  *.tar.bz2|*.tbz) tar xjvf "$target";;
+  *.tar.Z) tar zxvf "$target";;
+  *.gz) gzip -d "$target";;
+  *.bz2) bzip2 -dc "$target";;
+  *.Z) uncompress "$target";;
+  *.tar) tar xvf "$target";;
+  *.arj) unarj "$target";;
+esac
