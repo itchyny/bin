@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -eu
+
+if [ $# -ge 2 ]; then
+  echo "dropbox: too many arguments" > /dev/stderr
+  exit 1
+fi
+
+subcmd="${1:-start}"
+
+case "$subcmd" in
+  start|init)
+    open -a Dropbox
+    ;;
+  stop|kill)
+    osascript -e 'tell application "Dropbox" to quit'
+    ;;
+  *)
+    echo "dropbox: unknown command: $subcmd" > /dev/stderr
+    exit 1
+    ;;
+esac
