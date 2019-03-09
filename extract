@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -eu
 
+cmdname="$(basename "${BASH_SOURCE[0]}")"
+
 if [ $# -ne 1 ]; then
-  echo "extract: specify target file" > /dev/stderr
+  echo "$cmdname: specify target file" > /dev/stderr
   exit 1
 fi
 

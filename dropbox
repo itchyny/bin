@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -eu
 
+cmdname="$(basename "${BASH_SOURCE[0]}")"
+
 if [ $# -ge 2 ]; then
-  echo "dropbox: too many arguments" > /dev/stderr
+  echo "$cmdname: too many arguments" > /dev/stderr
   exit 1
 fi
 
-subcmd="${1:-start}"
+subcmd=${1:-start}
 
 case "$subcmd" in
   start|init)
@@ -16,7 +18,7 @@ case "$subcmd" in
     osascript -e 'tell application "Dropbox" to quit'
     ;;
   *)
-    echo "dropbox: unknown command: $subcmd" > /dev/stderr
+    echo "$cmdname: unknown command: $subcmd" > /dev/stderr
     exit 1
     ;;
 esac
