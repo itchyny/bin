@@ -5,7 +5,7 @@ branch-exists() {
 }
 
 rebase-onto() {
-  git rebase --onto "origin/$1" $(git log --merges --oneline -1 --format=%H)
+  git rebase --onto "origin/$1" "$(git log --merges --oneline -1 --format=%H)"
 }
 
 

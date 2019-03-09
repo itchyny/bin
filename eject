@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -eu
+
 if [ $# -eq 0 ]; then
-  for dir in /media/* /media/$(whoami)/* /Volumes/*; do
-    linkdir=$(readlink "$dir")
-    if [ -d "$dir" ] && [ "$linkdir" != "/" ] && \
+  for dir in /media/* "/media/$(whoami)/*" /Volumes/*; do
+    if [ -d "$dir" ] && [ "$(readlink "$dir")" != "/" ] && \
       [ "$dir" != "/media/$(whoami)" ] && \
       [ "$dir" != "/Volumes/Preboot" ]; then
       echo "$dir"

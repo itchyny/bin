@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
+set -eu
 
 if command -v gdate >/dev/null 2>&1; then
-  DATE=gdate
+  datecmd="gdate"
 else
-  DATE=date
+  datecmd="date"
 fi
 
 while IFS= read -r -d '' file; do
   logtime=$(git log -1 --format=%ci "$file")
-  mtime=$("$DATE" -d "$logtime" +%Y%m%d%H%M.%S)
-  if [ X"$mtime" = "X" ]; then
+  mtime=$("$datecmd" -d "$logtime" +%Y%m%d%H%M.%S)
+  if [ "$mtime" == "X" ]; then
     exit 1
   fi
   echo "$(printf "%-80s" "$file")"$'\t'"$logtime"$'\t'"$mtime"

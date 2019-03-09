@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -eux
 
 src=~/Dropbox
@@ -15,7 +15,7 @@ fi
 if [ -f "$src/.dropbox" ]; then
   rm -f "$src/.dropbox"
 fi
-for dir in /media/* /media/$(whoami)/* /Volumes/*; do
+for dir in /media/* "/media/$(whoami)/*" /Volumes/*; do
   targ=$dir/Dropbox
   if [ -d "$targ" ]; then
     echo "Start backup from $src to $targ."
