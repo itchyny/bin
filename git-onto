@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eu
 
 branch-exists() {
   git rev-parse "origin/$1" >/dev/null 2>&1
@@ -8,8 +9,7 @@ rebase-onto() {
   git rebase --onto "origin/$1" "$(git log --merges --oneline -1 --format=%H)"
 }
 
-
-has_diff=$(git diff | grep '^' > /dev/null 2>&1 || echo 1)
+has_diff=$(git diff --ignore-submodules | grep '^' > /dev/null 2>&1 || echo 1)
 
 if test -z "$has_diff"; then
   git stash
