@@ -6,8 +6,7 @@ if ! [ -e "$vim" ]; then
 fi
 
 if [ -t 0 ]; then
-  $vim "$@" < /dev/tty
-  exit_code=$?
+  exec $vim "$@" < /dev/tty
 else
   f=$(mktemp -t vim)
   cat /dev/stdin > "$f"
