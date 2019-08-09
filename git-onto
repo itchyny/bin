@@ -19,10 +19,12 @@ git fetch
 
 if branch-exists develop; then
   rebase-onto develop
+elif branch-exists staging; then
+  rebase-onto staging
 elif branch-exists master; then
   rebase-onto master
 else
-  echo "Unknown main branch: cannot find develop and master" >/dev/stderr
+  echo "Unknown main branch: cannot find develop, staging and master" >/dev/stderr
   exit 1
 fi
 
