@@ -4,10 +4,22 @@ if [ "$#" -eq 0 ]; then
   echo "No hosts" > /dev/stderr
   exit 1
 fi
+
+if [ "$1" == "-H" ]; then
+  filter() {
+    while read -r line; do echo "$1:$line"; done
+  }
+  shift
+else
+  filter() {
+    cat
+  }
+fi
+
 file="$1"
 shift
 hosts=("$@")
 
 for host in "${hosts[@]}"; do
-  scp -q "$host:$file" /dev/stdout 2>/dev/null
+  scp -q "$host:$file" /dev/stdout 2>/dev/null | filter "$host"
 done
