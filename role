@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cmdname="$(basename "${BASH_SOURCE[0]}")"
+
+if [[ "$#" -eq 0 ]]; then
+  echo "service name required" >/dev/stderr
+  exit 1
+fi
+
+if [[ -z "${MACKEREL_APIKEY:-}" ]]; then
+  echo 'specify $MACKEREL_APIKEY' >/dev/stderr
+  exit 1
+fi
+
+service="service=$1"
+shift
+
+roles=""
+for role in "$@"; do
+  roles="$roles&role=$role"
+done
+
+status="&status=working"
+
+cache=~/.cache/$cmdname/$service$(tr '&' '_' <<< "$roles").json
+mkdir -p "${cache%/*}"
+
+response=$(\
+  curl -s \
+    -H "X-Api-Key: $MACKEREL_APIKEY" \
+    -X GET "https://api.mackerelio.com/api/v0/hosts?$service$roles$status"\
+)
+if [[ "$response" == *'"error":'* ]]; then
+  echo "$response" >/dev/stderr
+  if [ -e "$cache" ]; then
+    jq -M -r ".hosts[].name" < "$cache"
+    exit 0
+  fi
+  exit 1
+fi
+
+tee "$cache" <<< "$response" | jq -M -r ".hosts[].name"
