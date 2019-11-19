@@ -2,6 +2,9 @@
 set -eux
 
 if command -v brew >/dev/null 2>&1; then
+  if command -v pyenv >/dev/null 2>&1; then
+    export PATH=${PATH//$(pyenv root)\/shims:/}
+  fi
   brew update
   brew upgrade --ignore-pinned
   brew cleanup -s
