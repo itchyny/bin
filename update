@@ -11,6 +11,8 @@ if command -v brew >/dev/null 2>&1; then
   brew doctor
 fi
 
+if [[ $(date +%w) -eq 0 ]]; then
+
 if command -v miv >/dev/null 2>&1; then
   miv update
 fi
@@ -23,4 +25,6 @@ if command -v stack >/dev/null 2>&1; then
   stack update
   stack upgrade
   stack clean
+fi
+
 fi
