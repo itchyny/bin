@@ -2,16 +2,18 @@
 set -eux
 
 if command -v brew >/dev/null 2>&1; then
+  { set +x; } 2>/dev/null
   if command -v pyenv >/dev/null 2>&1; then
     export PATH=${PATH//$(pyenv root)\/shims:/}
   fi
+  set -x
   brew update
   brew upgrade --ignore-pinned
   brew cleanup -s
   brew doctor
 fi
 
-if [[ $(date +%w) -eq 0 ]]; then
+if ( { set +x; } 2>/dev/null && [[ $(date +%w) -eq 0 ]] ); then
 
 if command -v miv >/dev/null 2>&1; then
   miv update
