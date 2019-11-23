@@ -10,7 +10,7 @@ if [[ "$#" -eq 0 ]]; then
 fi
 
 if [[ -z "${MACKEREL_APIKEY:-}" ]]; then
-  echo 'specify $MACKEREL_APIKEY' >/dev/stderr
+  echo "specify \$MACKEREL_APIKEY" >/dev/stderr
   exit 1
 fi
 
