@@ -14,7 +14,7 @@ if command -v brew >/dev/null 2>&1; then
 fi
 
 { set +x; } 2>/dev/null
-test $(date +%w) -ne 0 && exit 0 || :
+test "$(date +%w)" -ne 0 && exit 0
 set -x
 
 if command -v miv >/dev/null 2>&1; then
