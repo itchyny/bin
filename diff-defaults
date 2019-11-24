@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmdname="$(basename "${BASH_SOURCE[0]}")"
+
+before=$(mktemp -t "$cmdname.XXXXXX")
+after=$(mktemp -t "$cmdname.XXXXXX")
+
+clean_up() {
+  rm -rf "$before" "$after"
+}
+trap clean_up EXIT
+
+defaults read > "$before"
+read -p "Change configuration and press enter: " -r
+defaults read > "$after"
+
+vimdiff "$before" "$after"
