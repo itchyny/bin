@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -eux
 
-if command -v brew >/dev/null 2>&1; then
-  { set +x; } 2>/dev/null
-  if command -v pyenv >/dev/null 2>&1; then
-    export PATH=${PATH//$(pyenv root)\/shims:/}
-  fi
-  set -x
+if ( set +x; command -v brew ) >/dev/null 2>&1; then
+  {
+    set +x
+    if command -v pyenv; then
+      export PATH=${PATH//$(pyenv root)\/shims:/}
+    fi
+    set -x
+  } >/dev/null 2>&1
   brew update
   brew upgrade --ignore-pinned
   brew cleanup -s
@@ -17,15 +19,15 @@ fi
 test "$(date +%w)" -ne 0 && exit 0
 set -x
 
-if command -v miv >/dev/null 2>&1; then
+if ( set +x; command -v miv ) >/dev/null 2>&1; then
   miv update
 fi
 
-if command -v rustup >/dev/null 2>&1; then
+if ( set +x; command -v rustup ) >/dev/null 2>&1; then
   rustup update stable
 fi
 
-if command -v stack >/dev/null 2>&1; then
+if ( set +x; command -v stack ) >/dev/null 2>&1; then
   stack update
   stack upgrade
   stack clean
