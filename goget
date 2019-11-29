@@ -5,6 +5,7 @@ cmdname="$(basename "${BASH_SOURCE[0]}")"
 dir=$(mktemp -d -t "$cmdname.XXXXXX")
 
 clean_up() {
+  chmod -R 700 "$dir"
   rm -rf "$dir"
 }
 trap clean_up EXIT
