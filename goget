@@ -9,7 +9,7 @@ clean_up() {
 }
 trap clean_up EXIT
 
-export GO111MODULE=off
+export GO111MODULE=on
 export GOBIN=${GOPATH:-$(go env GOPATH)}/bin
 export GOPATH=$dir
 
