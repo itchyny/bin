@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -eu
+
+for f in "$@"; do
+  (
+    cd "$(dirname "$f")"
+    bash "$(basename "$f")"
+  )
+done
