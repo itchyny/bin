@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 cmdname="$(basename "${BASH_SOURCE[0]}")"
@@ -21,7 +21,7 @@ exit_traps=""
 add_exit_trap() {
   exit_traps="$(printf "%q " "$@"); $exit_traps"
 }
-trap 'sh -c "$exit_traps"' EXIT
+trap '/bin/bash -c "$exit_traps"' EXIT
 add_exit_trap rm -rf "$dir"
 
 mv "$target_abspath" "$dir/$name"
