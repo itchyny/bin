@@ -37,18 +37,18 @@ suffix=""
 
 pushd "$dir" >/dev/null 2>&1
 case "$name" in
-  *.tar.gz) tar xzvf "$name" ; suffix=".tar.gz" ;;
-  *.tgz) tar xzvf "$name"    ; suffix=".tgz"    ;;
-  *.tar.xz) tar Jxvf "$name" ; suffix=".tar.xz" ;;
-  *.zip) unzip "$name"       ; suffix=".zip"    ;;
-  *.lzh) lha e "$name"       ; suffix=".lzh"    ;;
+  *.tar.gz) tar xvf "$name"  ; suffix=".tar.gz" ;;
+  *.tgz) tar xvf "$name"     ; suffix=".tgz"    ;;
   *.tar.bz2) tar xjvf "$name"; suffix=".tar.bz2";;
   *.tbz) tar xjvf "$name"    ; suffix=".tbz"    ;;
-  *.tar.Z) tar zxvf "$name"  ; suffix=".tar.Z"  ;;
+  *.tar.xz) tar xJvf "$name" ; suffix=".tar.xz" ;;
+  *.tar.Z) tar xvf "$name"   ; suffix=".tar.Z"  ;;
+  *.tar) tar xvf "$name"     ; suffix=".tar"    ;;
+  *.zip) unzip "$name"       ; suffix=".zip"    ;;
+  *.lzh) lha e "$name"       ; suffix=".lzh"    ;;
   *.gz) gzip -d "$name"      ; suffix=".gz"     ;;
   *.bz2) bzip2 -dc "$name"   ; suffix=".bz2"    ;;
   *.Z) uncompress "$name"    ; suffix=".Z"      ;;
-  *.tar) tar xvf "$name"     ; suffix=".tar"    ;;
   *.arj) unarj "$name"       ; suffix=".arj"    ;;
   *) echo "$cmdname: not an archive: $target" >&2; exit 1;;
 esac
