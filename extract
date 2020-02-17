@@ -12,6 +12,11 @@ target="$1"
 target_abspath="$(realpath "$target")"
 name="$(basename "$target")"
 
+if [[ "$(file --brief --mime-type "$target" || :)" == "text"* ]]; then
+  echo "$cmdname: $target is a text file" > /dev/stderr
+  exit 1
+fi
+
 while :; do
   dir="$(dirname "$target_abspath")/$name.$RANDOM"
   [[ -e "$dir" ]] || break
