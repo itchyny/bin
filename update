@@ -10,6 +10,15 @@ if ( set +x; command -v brew ) >/dev/null 2>&1; then
     set -x
   } >/dev/null 2>&1
   brew update
+  if ps | grep "[/]usr/local/bin/vim" >/dev/null; then
+    if ! brew list --pinned | grep vim >/dev/null; then
+      brew pin vim
+    fi
+  else
+    if brew list --pinned | grep vim >/dev/null; then
+      brew unpin vim
+    fi
+  fi
   brew upgrade --ignore-pinned
   brew cleanup -s
   brew doctor
