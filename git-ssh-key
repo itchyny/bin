@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ssh_key=${1:?Usage: git-ssh-key identity-file commands...}
+shift
+GIT_SSH_COMMAND=" \
+  ssh -F /dev/null \
+    -o IdentitiesOnly=yes \
+    -o IdentityFile=\"$ssh_key\" \
+    -o UserKnownHostsFile=/dev/null \
+    -o StrictHostKeyChecking=no \
+" "$@"
