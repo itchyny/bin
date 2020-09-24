@@ -50,7 +50,12 @@ case "$name" in
   *.tar.xz) tar xJvf "$name" ; suffix=".tar.xz" ;;
   *.tar.Z) tar xvf "$name"   ; suffix=".tar.Z"  ;;
   *.tar) tar xvf "$name"     ; suffix=".tar"    ;;
-  *.zip) unzip "$name"       ; suffix=".zip"    ;;
+  *.zip)
+    if command -v ditto >/dev/null; then
+      ditto -V -x -k --sequesterRsrc "$name" .
+    else
+      unzip "$name"
+    fi                       ; suffix=".zip"    ;;
   *.lzh) lha e "$name"       ; suffix=".lzh"    ;;
   *.gz) gzip -d "$name"      ; suffix=".gz"     ;;
   *.bz2) bzip2 -dc "$name"   ; suffix=".bz2"    ;;
