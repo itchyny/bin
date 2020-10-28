@@ -41,3 +41,7 @@ if ( set +x; command -v stack ) >/dev/null 2>&1; then
   stack upgrade
   stack clean
 fi
+
+if ( set +x; command -v zinit ) >/dev/null 2>&1; then
+  zinit update
+fi
