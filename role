@@ -22,7 +22,7 @@ for role in "$@"; do
   roles="$roles&role=$role"
 done
 
-status="&status=working"
+status="&status=working&status=standby"
 
 cache=~/.cache/$cmdname/$service$(tr '&' '_' <<< "$roles").json
 mkdir -p "${cache%/*}"
