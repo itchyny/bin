@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [[ $# -ne 3 ]]; then
+  echo "$0 low high script" >&2
+  exit 1
+fi
+
+low="$1"
+high="$2"
+
+if [[ "$low" -ge "$high" ]]; then
+  echo "first argument should be lower than second argument" >&2
+  exit 1
+fi
+
+script="$3"
+
+bad="$high"
+while [[ "$low" -lt "$high" ]]; do
+  mid="$(((low + high) / 2))"
+  if bash -c "${script//%/$mid}"; then
+    echo "$mid: good"
+    low="$((mid + 1))"
+  else
+    echo "$mid: bad"
+    high="$mid"
+    bad="$mid"
+  fi
+done
+echo "$bad is the bad version"
