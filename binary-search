@@ -1,19 +1,34 @@
 #!/bin/bash
 
-if [[ $# -ne 3 ]]; then
-  echo "$0 low high script" >&2
+cmdname="$(basename "${BASH_SOURCE[0]}")"
+
+usage() {
+  echo "$cmdname low high script" >&2
   exit 1
+}
+
+if [[ $# -ne 3 ]]; then
+  usage
 fi
 
 low="$1"
 high="$2"
+script="$3"
+
+if [[ ! $low =~ ^-?[0-9]+$ ]]; then
+  echo "first argument should be an integer" >&2
+  usage
+fi
+
+if [[ ! $high =~ ^-?[0-9]+$ ]]; then
+  echo "second argument should be an integer" >&2
+  usage
+fi
 
 if [[ "$low" -ge "$high" ]]; then
   echo "first argument should be lower than second argument" >&2
-  exit 1
+  usage
 fi
-
-script="$3"
 
 bad="$high"
 while [[ "$low" -lt "$high" ]]; do
@@ -27,4 +42,5 @@ while [[ "$low" -lt "$high" ]]; do
     bad="$mid"
   fi
 done
-echo "$bad is the bad version"
+
+echo "$bad is the bad number"
