@@ -15,7 +15,7 @@ case "$subcmd" in
     open -a Dropbox
     ;;
   stop|kill)
-    osascript -e 'tell application "Dropbox" to quit'
+    pkill -x Dropbox
     ;;
   *)
     echo "$cmdname: unknown command: $subcmd" > /dev/stderr
