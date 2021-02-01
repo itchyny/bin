@@ -66,6 +66,7 @@ esac
 mv_if_exists "$dir/$name" "$(dirname "$target_abspath")"
 popd >/dev/null 2>&1
 
+shopt -s dotglob
 if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
   [[ "$(basename "$(ls -d1 "$dir/"*)")" == "$(basename "$name" "$suffix")" ]]; then
   path="$(ls -d1 "$dir/"*)"
