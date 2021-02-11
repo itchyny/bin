@@ -7,12 +7,13 @@ fi
 
 if [ -t 0 ]; then
   exec $vim "$@" < /dev/tty
-else
+elif [ -t 1 ]; then
   f=$(mktemp -t vim)
   cat /dev/stdin > "$f"
   $vim "$f" < /dev/tty
   exit_code=$?
   rm -f "$f" || :
+  exit $exit_code
+else
+  exec $vim "$@"
 fi
-
-exit $exit_code
