@@ -2,7 +2,10 @@
 
 vim=/usr/local/bin/vim
 if ! [ -e "$vim" ]; then
-  vim=/usr/bin/vim
+  vim=/opt/homebrew/bin/vim
+  if ! [ -e "$vim" ]; then
+    vim=/usr/bin/vim
+  fi
 fi
 
 if [ -t 0 ]; then
