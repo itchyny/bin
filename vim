@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-vim=/usr/local/bin/vim
-if ! [ -e "$vim" ]; then
-  vim=/opt/homebrew/bin/vim
-  if ! [ -e "$vim" ]; then
+vim=/opt/homebrew/bin/vim
+if ! [ -x "$vim" ]; then
+  vim=/usr/local/bin/vim
+  if ! [ -x "$vim" ]; then
     vim=/usr/bin/vim
   fi
 fi
