@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GOTIP="$(go env GOPATH)/bin/gotip"
-if [[ ! -x "$GOTIP" ]]; then
-  go install golang.org/dl/gotip@latest
+NAME="${0##*/}"
+GO="$(go env GOPATH)/bin/$NAME"
+if [[ ! -x "$GO" ]]; then
+  go install "golang.org/dl/$NAME@latest"
 fi
 
 if [[ ! -d ~/.share/sdk ]]; then
-  "$GOTIP" download
+  "$GO" download
   mv ~/sdk ~/.share/sdk
 fi
 
 if [[ ! -e ~/sdk ]]; then
   ln -s ~/.share/sdk ~/sdk
+  if [[ ! -d ~/.share/sdk/"$NAME" ]]; then
+    "$GO" download
+  fi
   trap 'rm -f ~/sdk' EXIT
 fi
 
-"$GOTIP" "$@"
+"$GO" "$@"
