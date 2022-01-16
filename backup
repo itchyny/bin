@@ -1,17 +1,16 @@
-#!/usr/bin/env bash
-set -eux
+#!/bin/bash
+set -euxo pipefail
 
 src=~/Dropbox
-if ! [ -d "$src" ]; then
+if [[ ! -d "$src" ]]; then
   src=~/Documents/Dropbox
-fi
-if ! [ -d "$src" ]; then
-  exit 1
-fi
-for dir in /media/* "/media/$(whoami)/*" /Volumes/*; do
-  targ=$dir/Dropbox
-  if [ -d "$targ" ]; then
-    echo "Start backup from $src to $targ."
-    rsync -av --delete "$src/" "$targ/"
+  if [[ ! -d "$src" ]]; then
+    exit 1
   fi
+fi
+
+shopt -s nullglob
+for target in /media/*/Dropbox /media/"$USER"/*/Dropbox /Volumes/*/Dropbox; do
+  echo "Start backup from $src to $target."
+  rsync -av --delete "$src/" "$target/"
 done
