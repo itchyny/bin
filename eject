@@ -1,24 +1,24 @@
-#!/usr/bin/env bash
-set -eu
+#!/bin/bash
+set -euo pipefail
 
-if [ $# -eq 0 ]; then
-  for dir in /media/* "/media/$(whoami)/*" /Volumes/*; do
-    if [ -d "$dir" ] && [ "$(readlink "$dir")" != "/" ] && \
-      [ "$dir" != "/media/$(whoami)" ] && \
-      [ "$dir" != "/Volumes/Preboot" ]; then
-      echo "$dir"
-      $0 "$dir"
+_eject() {
+  echo "Ejecting $dir."
+  if [[ "$(uname)" = "Darwin" ]]; then
+    sudo diskutil umount "$dir"
+  elif [[ -x /usr/bin/eject ]]; then
+    sudo /usr/bin/eject "$dir"
+  fi
+}
+
+if [[ $# -eq 0 ]]; then
+  shopt -s nullglob
+  for dir in /media/* /media/"$USER"/* /Volumes/*; do
+    if [[ "$(readlink "$dir")" != "/" && "$dir" != "/media/$USER" && "$dir" != "/Volumes/Preboot" ]]; then
+      _eject "$dir"
     fi
   done
 else
-  echo "Ejecting $1."
-  if [ "$(uname)" = "Darwin" ]; then
-    sudo diskutil umount "$1"
-  elif [ -x /usr/bin/eject ]; then
-    sudo /usr/bin/eject "$1"
-  fi
-  if [ $# -ge 2 ]; then
-    shift
-    $0 "$@"
-  fi
+  for dir in "$@"; do
+    _eject "$dir"
+  done
 fi
