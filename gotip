@@ -14,9 +14,11 @@ fi
 
 if [[ ! -e ~/sdk ]]; then
   ln -s ~/.share/sdk ~/sdk
+  trap 'rm -f ~/sdk' EXIT
   if [[ ! -d ~/.share/sdk/"$NAME" ]]; then
     "$GO" download
   fi
+elif [[ -L ~/sdk ]]; then
   trap 'rm -f ~/sdk' EXIT
 fi
 
