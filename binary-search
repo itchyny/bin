@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cmdname="$(basename "${BASH_SOURCE[0]}")"
+cmdname="${BASH_SOURCE[0]##*/}"
 
 usage() {
   echo "$cmdname low high script" >&2

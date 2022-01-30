@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-cmdname="$(basename "${BASH_SOURCE[0]}")"
+cmdname="${BASH_SOURCE[0]##*/}"
 
 if [[ "$#" -eq 0 ]]; then
   echo "service name required" >/dev/stderr

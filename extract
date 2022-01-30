@@ -2,7 +2,7 @@
 # shellcheck disable=SC2012
 set -euo pipefail
 
-cmdname="$(basename "${BASH_SOURCE[0]}")"
+cmdname="${BASH_SOURCE[0]##*/}"
 
 if [[ $# -ne 1 ]]; then
   echo "$cmdname: specify target file" > /dev/stderr

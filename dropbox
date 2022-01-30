@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-cmdname="$(basename "${BASH_SOURCE[0]}")"
+cmdname="${BASH_SOURCE[0]##*/}"
 
 if [ $# -ge 2 ]; then
   echo "$cmdname: too many arguments" > /dev/stderr
