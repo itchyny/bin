@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
-if [ "$#" -eq 0 ]; then
-  echo "input commit message" > /dev/stderr
-  exit 1
+if [[ "$#" -eq 0 ]]; then
+  exec git commit -a --amend
+else
+  exec git commit -a --amend -m "$(IFS=" "; echo "$*")"
 fi
-
-message="$1"
-shift
-for m in "$@"; do
-  message="$message $m"
-done
-
-git commit --amend -m "$message"
