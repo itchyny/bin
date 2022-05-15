@@ -1,18 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-cmdname="${BASH_SOURCE[0]##*/}"
+before=$(mktemp)
+after=$(mktemp)
+trap 'rm -f "$before" "$after"' EXIT
 
-before=$(mktemp -t "$cmdname.before")
-after=$(mktemp -t "$cmdname.after")
-
-clean_up() {
-  rm -rf "$before" "$after"
-}
-trap clean_up EXIT
-
-{ defaults read; defaults -currentHost read; } > "$before"
+{ defaults read; defaults -currentHost read; } >"$before"
 read -p "Change configuration and press enter: " -r
-{ defaults read; defaults -currentHost read; } > "$after"
+{ defaults read; defaults -currentHost read; } >"$after"
 
 vimdiff "$before" "$after"
