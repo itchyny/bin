@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ORIGIN=$(git remote get-url origin 2>/dev/null)
 

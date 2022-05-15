@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -eu
 
 if command -v gdate >/dev/null 2>&1; then

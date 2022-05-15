@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 vim=/opt/homebrew/bin/vim
 if ! [ -x "$vim" ]; then

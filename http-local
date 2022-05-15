@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Ref: http://blog.kamipo.net/entry/2013/02/20/122225
 
 port=8000

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ $# -eq 0 ]; then
   exit 0
 elif echo "$1" | grep "github\|\.git$" > /dev/null 2>&1 && \

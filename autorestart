@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 INTERVAL=600
 if [[ "$1" = "--interval" ]] && shift; then
