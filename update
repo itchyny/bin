@@ -24,10 +24,6 @@ if ( set +x; command -v brew ) &>/dev/null; then
   brew doctor
 fi
 
-{ set +x; } 2>/dev/null
-test "$(date +%w)" -ne 0 && exit 0
-set -x
-
 if ( set +x; command -v miv ) &>/dev/null; then
   miv update
 fi
