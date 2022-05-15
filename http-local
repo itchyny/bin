@@ -2,20 +2,20 @@
 # Ref: http://blog.kamipo.net/entry/2013/02/20/122225
 
 port=8000
-while netstat -vanp tcp | grep "$port" >/dev/null 2>&1; do
+while netstat -vanp tcp | grep "$port" &>/dev/null; do
   port=$((port + 1))
 done
 
-if command -v python >/dev/null 2>&1; then
+if command -v python &>/dev/null; then
   if python -V 2>&1 | grep -qm1 'Python 3\.'; then
     python -m http.server $port
   else
     python -m SimpleHTTPServer $port
   fi
-elif command -v ruby >/dev/null 2>&1; then
+elif command -v ruby &>/dev/null; then
   ruby -rwebrick -e "WEBrick::HTTPServer.new(:Port => $port, :DocumentRoot => '.').start"
-elif command -v php >/dev/null 2>&1 && php -v | grep -qm1 'PHP 5\.[45]\.'; then
+elif command -v php &>/dev/null && php -v | grep -qm1 'PHP 5\.[45]\.'; then
   php -S 0.0.0.0:$port
-elif command -v plackup >/dev/null 2>&1; then
+elif command -v plackup &>/dev/null; then
   plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root => ".")->to_app'
 fi

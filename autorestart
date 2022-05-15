@@ -6,19 +6,19 @@ if [[ "$1" = "--interval" ]] && shift; then
 fi
 
 kill_proc() {
-  if kill -0 "$2" >/dev/null 2>&1; then
+  if kill -0 "$2" &>/dev/null; then
     disown "$2"
     # PGID=$(ps -o pgid= "$2" | tr -d ' ')
     # echo $PGID
     # echo $$
     # TODO: kill process group?
-    kill -"$1" "$2" >/dev/null 2>&1 || true
+    kill -"$1" "$2" &>/dev/null || true
   fi
 }
 
 clean_up() {
   kill_proc 9 "$PID"
-  while kill -0 "$PID" >/dev/null 2>&1; do
+  while kill -0 "$PID" &>/dev/null; do
     sleep 1
   done
   exit "$(wait "$PID"; echo $?)"
@@ -31,7 +31,7 @@ while true; do
   sh -c "$*" &
   PID="$!"
   i=0
-  while kill -0 "$PID" >/dev/null 2>&1 && test "$i" -lt "$INTERVAL"; do
+  while kill -0 "$PID" &>/dev/null && test "$i" -lt "$INTERVAL"; do
     sleep 1
     i=$((i + 1))
   done

@@ -1,12 +1,13 @@
 #!/bin/bash
+
 if [ $# -eq 0 ]; then
   exit 0
-elif echo "$1" | grep "github\|\.git$" > /dev/null 2>&1 && \
-   ! echo "$1" | grep "github\.io\|raw\.github\.com\|githubusercontent" > /dev/null 2>&1; then
+elif echo "$1" | grep "github\|\.git$" &>/dev/null &&
+  ! echo "$1" | grep "github\.io\|raw\.github\.com\|githubusercontent" &>/dev/null; then
   git clone "$1"
-elif command -v curl > /dev/null 2>&1; then
+elif command -v curl &>/dev/null; then
   curl -ORLk "$1"
-elif command -v wget > /dev/null 2>&1; then
+elif command -v wget &>/dev/null; then
   wget --no-check-certificate --user-agent=download "$1"
 fi
 shift

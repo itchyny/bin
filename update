@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -eux
 
-if ( set +x; command -v brew ) >/dev/null 2>&1; then
+if ( set +x; command -v brew ) &>/dev/null; then
   {
     set +x
     if command -v pyenv; then
       export PATH=${PATH//$(pyenv root)\/shims:/}
     fi
     set -x
-  } >/dev/null 2>&1
+  } &>/dev/null
   brew update
   if pgrep -f "$(brew --prefix)/bin/vim" >/dev/null; then
     if ! brew list --pinned | grep vim >/dev/null; then
@@ -28,20 +28,20 @@ fi
 test "$(date +%w)" -ne 0 && exit 0
 set -x
 
-if ( set +x; command -v miv ) >/dev/null 2>&1; then
+if ( set +x; command -v miv ) &>/dev/null; then
   miv update
 fi
 
-if ( set +x; command -v rustup ) >/dev/null 2>&1; then
+if ( set +x; command -v rustup ) &>/dev/null; then
   rustup update stable
 fi
 
-if ( set +x; command -v stack ) >/dev/null 2>&1; then
+if ( set +x; command -v stack ) &>/dev/null; then
   stack update
   stack upgrade
   stack clean
 fi
 
-if ( set +x; command -v zinit ) >/dev/null 2>&1; then
+if ( set +x; command -v zinit ) &>/dev/null; then
   zinit update
 fi

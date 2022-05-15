@@ -4,7 +4,7 @@ set -eu
 cmdname="${BASH_SOURCE[0]##*/}"
 
 if [ $# -ge 2 ]; then
-  echo "$cmdname: too many arguments" > /dev/stderr
+  echo "$cmdname: too many arguments" >&2
   exit 1
 fi
 
@@ -18,7 +18,7 @@ case "$subcmd" in
     pkill -x Dropbox
     ;;
   *)
-    echo "$cmdname: unknown command: $subcmd" > /dev/stderr
+    echo "$cmdname: unknown command: $subcmd" >&2
     exit 1
     ;;
 esac

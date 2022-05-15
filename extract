@@ -5,7 +5,7 @@ set -euo pipefail
 cmdname="${BASH_SOURCE[0]##*/}"
 
 if [[ $# -ne 1 ]]; then
-  echo "$cmdname: specify target file" > /dev/stderr
+  echo "$cmdname: specify target file" >&2
   exit 1
 fi
 
@@ -14,7 +14,7 @@ target_abspath="$(realpath "$target")"
 name="$(basename "$target")"
 
 if [[ "$(file --brief --mime-type "$target" || :)" == "text"* ]]; then
-  echo "$cmdname: $target is a text file" > /dev/stderr
+  echo "$cmdname: $target is a text file" >&2
   exit 1
 fi
 
@@ -41,7 +41,7 @@ add_exit_trap mv_if_exists "$dir/$name" "$target_abspath"
 
 suffix=""
 
-pushd "$dir" >/dev/null 2>&1
+pushd "$dir" &>/dev/null
 case "$name" in
   *.tar.gz) tar xvf "$name"  ; suffix=".tar.gz" ;;
   *.tgz) tar xvf "$name"     ; suffix=".tgz"    ;;
@@ -64,7 +64,7 @@ case "$name" in
   *) echo "$cmdname: not an archive: $target" >&2; exit 1;;
 esac
 mv_if_exists "$dir/$name" "$(dirname "$target_abspath")"
-popd >/dev/null 2>&1
+popd &>/dev/null
 
 shopt -s dotglob
 if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
