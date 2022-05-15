@@ -1,18 +1,14 @@
 #!/bin/bash
 set -eu
 
-if command -v gdate &>/dev/null; then
-  datecmd="gdate"
-else
-  datecmd="date"
-fi
+command -v gdate &>/dev/null && date() { gdate "$@"; }
 
 while IFS= read -r -d '' file; do
   logtime=$(git log -1 --format=%ci "$file")
-  mtime=$("$datecmd" -d "$logtime" +%Y%m%d%H%M.%S)
+  mtime=$(date -d "$logtime" +%Y%m%d%H%M.%S)
   if [ "$mtime" == "X" ]; then
     exit 1
   fi
-  echo "$(printf "%-80s" "$file")"$'\t'"$logtime"$'\t'"$mtime"
+  printf "%-80s\t%s\t%s\n" "$file" "$logtime" "$mtime"
   touch -t "$mtime" "$file"
 done < <(git ls-files -z)
