@@ -10,12 +10,12 @@ if ( set +x; command -v brew ) &>/dev/null; then
     set -x
   } &>/dev/null
   brew update
-  if pgrep -f "$(brew --prefix)/bin/vim" >/dev/null; then
-    if ! brew list --pinned | grep vim >/dev/null; then
+  if pgrep -q -f "$(brew --prefix)/bin/vim"; then
+    if ! brew list --pinned | grep -q vim; then
       brew pin vim
     fi
   else
-    if brew list --pinned | grep vim >/dev/null; then
+    if brew list --pinned | grep -q vim; then
       brew unpin vim
     fi
   fi

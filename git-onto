@@ -9,7 +9,7 @@ rebase-onto() {
   git rebase --onto "origin/$1" "$(git log --merges --oneline -1 --format=%H)"
 }
 
-has_diff=$(git diff --ignore-submodules | grep '^' &>/dev/null || echo 1)
+has_diff=$(git diff --ignore-submodules | grep -q '^' || echo 1)
 
 if test -z "$has_diff"; then
   git stash

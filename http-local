@@ -2,7 +2,7 @@
 # Ref: http://blog.kamipo.net/entry/2013/02/20/122225
 
 port=8000
-while netstat -vanp tcp | grep "$port" &>/dev/null; do
+while netstat -vanp tcp | grep -q "$port"; do
   port=$((port + 1))
 done
 
