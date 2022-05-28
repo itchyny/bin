@@ -1,9 +1,9 @@
 #!/bin/bash
+set -u
 
-if [ $# -eq 0 ]; then
+if [[ $# -eq 0 ]]; then
   exit 0
-elif echo "$1" | grep -q "github\|\.git$" &&
-  ! echo "$1" | grep -q "github\.io\|raw\.github\.com\|githubusercontent"; then
+elif [[ "$1" =~ github|\.git$ && ! "$1" =~ github\.io|raw\.github\.com|githubusercontent ]]; then
   git clone "$1"
 elif command -v curl &>/dev/null; then
   curl -ORLk "$1"
