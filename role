@@ -1,17 +1,17 @@
 #!/bin/bash
-
 set -euo pipefail
 
-cmdname="${BASH_SOURCE[0]##*/}"
+abort() {
+  echo "${BASH_SOURCE[0]##*/}: $*" >&2
+  exit 1
+}
 
 if [[ "$#" -eq 0 ]]; then
-  echo "service name required" >/dev/stderr
-  exit 1
+  abort "service name required"
 fi
 
 if [[ -z "${MACKEREL_APIKEY:-}" ]]; then
-  echo "specify \$MACKEREL_APIKEY" >/dev/stderr
-  exit 1
+  abort "specify \$MACKEREL_APIKEY"
 fi
 
 service="service=$1"
@@ -24,7 +24,7 @@ done
 
 status="&status=working&status=standby"
 
-cache=~/.cache/$cmdname/$service$(tr '&' '_' <<< "$roles").json
+cache=~/.cache/role/$service$(tr '&' '_' <<< "$roles").json
 mkdir -p "${cache%/*}"
 
 response=$(\
@@ -33,7 +33,7 @@ response=$(\
     -X GET "https://api.mackerelio.com/api/v0/hosts?$service$roles$status"\
 )
 if [[ "$response" == *'"error":'* ]]; then
-  echo "$response" >/dev/stderr
+  echo "$response" >&2
   if [ -e "$cache" ]; then
     jq -M -r ".hosts[].name" < "$cache"
     exit 0

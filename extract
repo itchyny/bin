@@ -2,11 +2,13 @@
 # shellcheck disable=SC2012
 set -euo pipefail
 
-cmdname="${BASH_SOURCE[0]##*/}"
+abort() {
+  echo "${BASH_SOURCE[0]##*/}: $*" >&2
+  exit 1
+}
 
 if [[ $# -ne 1 ]]; then
-  echo "$cmdname: specify target file" >&2
-  exit 1
+  abort "specify target file"
 fi
 
 target="$1"
@@ -14,8 +16,7 @@ target_abspath="$(realpath "$target")"
 name="$(basename "$target")"
 
 if [[ "$(file --brief --mime-type "$target" || :)" == "text"* ]]; then
-  echo "$cmdname: $target is a text file" >&2
-  exit 1
+  abort "$target is a text file"
 fi
 
 while :; do
@@ -61,7 +62,7 @@ case "$name" in
   *.bz2) bzip2 -dc "$name"   ; suffix=".bz2"    ;;
   *.Z) uncompress "$name"    ; suffix=".Z"      ;;
   *.arj) unarj "$name"       ; suffix=".arj"    ;;
-  *) echo "$cmdname: not an archive: $target" >&2; exit 1;;
+  *) abort "not an archive: $target"              ;;
 esac
 mv_if_exists "$dir/$name" "$(dirname "$target_abspath")"
 popd &>/dev/null

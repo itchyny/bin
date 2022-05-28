@@ -1,16 +1,16 @@
 #!/bin/bash
 set -eu
 
-cmdname="${BASH_SOURCE[0]##*/}"
+abort() {
+  echo "${BASH_SOURCE[0]##*/}: $*" >&2
+  exit 1
+}
 
 if [ $# -ge 2 ]; then
-  echo "$cmdname: too many arguments" >&2
-  exit 1
+  abort "too many arguments"
 fi
 
-subcmd=${1:-start}
-
-case "$subcmd" in
+case "${1:-start}" in
   start|init)
     open -a Dropbox
     ;;
@@ -18,7 +18,6 @@ case "$subcmd" in
     pkill -x Dropbox
     ;;
   *)
-    echo "$cmdname: unknown command: $subcmd" >&2
-    exit 1
+    abort "unknown command: $1"
     ;;
 esac

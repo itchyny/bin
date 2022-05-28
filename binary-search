@@ -1,14 +1,12 @@
 #!/bin/bash
 
-cmdname="${BASH_SOURCE[0]##*/}"
-
-usage() {
-  echo "$cmdname low high script" >&2
+abort() {
+  echo "${BASH_SOURCE[0]##*/}: $*" >&2
   exit 1
 }
 
 if [[ $# -ne 3 ]]; then
-  usage
+  abort "specify low, high, script (% is replaced)"
 fi
 
 low="$1"
@@ -16,18 +14,15 @@ high="$2"
 script="$3"
 
 if [[ ! $low =~ ^-?[0-9]+$ ]]; then
-  echo "first argument should be an integer" >&2
-  usage
+  abort "first argument should be an integer"
 fi
 
 if [[ ! $high =~ ^-?[0-9]+$ ]]; then
-  echo "second argument should be an integer" >&2
-  usage
+  abort "second argument should be an integer"
 fi
 
 if [[ "$low" -ge "$high" ]]; then
-  echo "first argument should be lower than second argument" >&2
-  usage
+  abort "first argument should be lower than second argument"
 fi
 
 bad="$high"
