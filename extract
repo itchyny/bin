@@ -15,20 +15,29 @@ target="$1"
 target_abspath="$(realpath -- "$target")"
 name="$(basename -- "$target")"
 
+if [[ ! -e "$target" ]]; then
+  abort "$target does not exist"
+fi
+
+if [[ ! -f "$target" ]]; then
+  abort "$target is not a file"
+fi
+
 if [[ "$(file --brief --mime-type -- "$target" || :)" == text/* ]]; then
   abort "$target is a text file"
 fi
+
+exit_traps=""
+add_exit_trap() {
+  exit_traps="$(printf "%q " "$@"); $exit_traps"
+}
+trap '/bin/bash -c "$exit_traps"' EXIT
 
 while :; do
   dir="$(dirname -- "$target_abspath")/$name.$RANDOM"
   [[ -e "$dir" ]] || break
 done
 mkdir -- "$dir"
-exit_traps=""
-add_exit_trap() {
-  exit_traps="$(printf "%q " "$@"); $exit_traps"
-}
-trap '/bin/bash -c "$exit_traps"' EXIT
 add_exit_trap rm -rf "$dir"
 
 mv "$target_abspath" "$dir/$name"
@@ -41,7 +50,6 @@ export -f mv_if_exists
 add_exit_trap mv_if_exists "$dir/$name" "$target_abspath"
 
 suffix=""
-
 pushd "$dir" &>/dev/null
 case "$name" in
   *.tar.gz) tar xvf "$name"  ; suffix=".tar.gz" ;;
@@ -62,7 +70,7 @@ case "$name" in
   *.bz2) bzip2 -d -- "$name" ; suffix=".bz2"    ;;
   *.Z) uncompress -- "$name" ; suffix=".Z"      ;;
   *.arj) unarj "./$name"     ; suffix=".arj"    ;;
-  *) abort "not an archive: $target"              ;;
+  *) abort "$target is not an archive"          ;;
 esac
 mv_if_exists "$dir/$name" "$target_abspath"
 popd &>/dev/null
