@@ -83,20 +83,17 @@ if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
   i=0
   prefix="$new_path"
   while [[ -e "$new_path" ]]; do
-    i="$((i + 1))"
-    new_path="${prefix}_$i"
+    new_path="${prefix}_$((++i))"
   done
   mv "$path" "$new_path"
-  echo "output: $new_path" >&2
 else
   new_path="$(basename -- "$target_abspath" "$suffix")"
   i=0
   prefix="$new_path"
   while [[ -e "$new_path" ]]; do
-    i="$((i + 1))"
-    new_path="${prefix}_$i"
+    new_path="${prefix}_$((++i))"
   done
   mkdir -- "$new_path"
   mv "$dir/"* "$new_path"
-  echo "output: $new_path" >&2
 fi
+echo "output: $new_path" >&2
