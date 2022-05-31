@@ -12,18 +12,18 @@ if [[ $# -ne 1 ]]; then
 fi
 
 target="$1"
-target_abspath="$(realpath "$target")"
-name="$(basename "$target")"
+target_abspath="$(realpath -- "$target")"
+name="$(basename -- "$target")"
 
-if [[ "$(file --brief --mime-type "$target" || :)" == "text"* ]]; then
+if [[ "$(file --brief --mime-type -- "$target" || :)" == text/* ]]; then
   abort "$target is a text file"
 fi
 
 while :; do
-  dir="$(dirname "$target_abspath")/$name.$RANDOM"
+  dir="$(dirname -- "$target_abspath")/$name.$RANDOM"
   [[ -e "$dir" ]] || break
 done
-mkdir "$dir"
+mkdir -- "$dir"
 exit_traps=""
 add_exit_trap() {
   exit_traps="$(printf "%q " "$@"); $exit_traps"
@@ -53,25 +53,25 @@ case "$name" in
   *.tar) tar xvf "$name"     ; suffix=".tar"    ;;
   *.zip)
     if command -v ditto >/dev/null; then
-      ditto -V -x -k --sequesterRsrc "$name" .
+      ditto -V -x -k --sequesterRsrc -- "$name" .
     else
-      unzip "$name"
+      unzip "./$name"
     fi                       ; suffix=".zip"    ;;
-  *.lzh) lha e "$name"       ; suffix=".lzh"    ;;
-  *.gz) gzip -d "$name"      ; suffix=".gz"     ;;
-  *.bz2) bzip2 -dc "$name"   ; suffix=".bz2"    ;;
-  *.Z) uncompress "$name"    ; suffix=".Z"      ;;
-  *.arj) unarj "$name"       ; suffix=".arj"    ;;
+  *.lzh) lha e -- "$name"    ; suffix=".lzh"    ;;
+  *.gz) gzip -d -- "$name"   ; suffix=".gz"     ;;
+  *.bz2) bzip2 -d -- "$name" ; suffix=".bz2"    ;;
+  *.Z) uncompress -- "$name" ; suffix=".Z"      ;;
+  *.arj) unarj "./$name"     ; suffix=".arj"    ;;
   *) abort "not an archive: $target"              ;;
 esac
-mv_if_exists "$dir/$name" "$(dirname "$target_abspath")"
+mv_if_exists "$dir/$name" "$target_abspath"
 popd &>/dev/null
 
 shopt -s dotglob
 if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
-  [[ "$(basename "$(ls -d1 "$dir/"*)")" == "$(basename "$name" "$suffix")" ]]; then
+  [[ "$(basename -- "$(ls -d1 "$dir/"*)")" == "$(basename -- "$name" "$suffix")" ]]; then
   path="$(ls -d1 "$dir/"*)"
-  new_path="./$(basename "$path")"
+  new_path="./$(basename -- "$path")"
   i=0
   prefix="$new_path"
   while [[ -e "$new_path" ]]; do
@@ -81,14 +81,14 @@ if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
   mv "$path" "$new_path"
   echo "output: $new_path" >&2
 else
-  new_path="$(basename "$target_abspath" "$suffix")"
+  new_path="$(basename -- "$target_abspath" "$suffix")"
   i=0
   prefix="$new_path"
   while [[ -e "$new_path" ]]; do
     i="$((i + 1))"
     new_path="${prefix}_$i"
   done
-  mkdir "$new_path"
+  mkdir -- "$new_path"
   mv "$dir/"* "$new_path"
   echo "output: $new_path" >&2
 fi
