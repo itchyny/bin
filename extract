@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC2012
 set -euo pipefail
 
 abort() {
@@ -76,10 +75,10 @@ mv_if_exists "$dir/$name" "$target_abspath"
 popd &>/dev/null
 
 shopt -s dotglob
-if [[ "$(ls -d1 "$dir/"* | wc -l)" -eq 1 ]] && \
-  [[ "$(basename -- "$(ls -d1 "$dir/"*)")" == "$(basename -- "$name" "$suffix")" ]]; then
-  path="$(ls -d1 "$dir/"*)"
-  new_path="./$(basename -- "$path")"
+files=("$dir"/*)
+if [[ "${#files[@]}" -eq 1 ]] && [[ "${files[0]##*/}" == "${name%"$suffix"}" ]]; then
+  path="${files[0]}"
+  new_path="$(basename -- "$path")"
   i=0
   prefix="$new_path"
   while [[ -e "$new_path" ]]; do
