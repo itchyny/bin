@@ -39,10 +39,10 @@ done
 mkdir -- "$dir"
 add_exit_trap rm -rf "$dir"
 
-mv "$target_abspath" "$dir/$name"
+mv -- "$target_abspath" "$dir/$name"
 mv_if_exists() {
   if [[ -e "$1" ]]; then
-    mv "$1" "$2"
+    mv -- "$1" "$2"
   fi
 }
 export -f mv_if_exists
@@ -84,7 +84,7 @@ if [[ "${#files[@]}" -eq 1 ]] && [[ "${files[0]##*/}" == "${name%"$suffix"}" ]];
   while [[ -e "$new_path" ]]; do
     new_path="${prefix}_$((++i))"
   done
-  mv "$path" "$new_path"
+  mv -- "$path" "$new_path"
 else
   new_path="$(basename -- "$target_abspath" "$suffix")"
   i=0
@@ -94,7 +94,7 @@ else
   done
   mkdir -- "$new_path"
   if [[ "${#files[@]}" -gt 0 ]]; then
-    mv "${files[@]}" "$new_path"
+    mv -- "${files[@]}" "$new_path"
   fi
 fi
 echo "output: $new_path" >&2
