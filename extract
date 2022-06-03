@@ -74,7 +74,7 @@ esac
 mv_if_exists "$dir/$name" "$target_abspath"
 popd &>/dev/null
 
-shopt -s dotglob
+shopt -s nullglob dotglob
 files=("$dir"/*)
 if [[ "${#files[@]}" -eq 1 ]] && [[ "${files[0]##*/}" == "${name%"$suffix"}" ]]; then
   path="${files[0]}"
@@ -93,6 +93,8 @@ else
     new_path="${prefix}_$((++i))"
   done
   mkdir -- "$new_path"
-  mv "$dir/"* "$new_path"
+  if [[ "${#files[@]}" -gt 0 ]]; then
+    mv "${files[@]}" "$new_path"
+  fi
 fi
 echo "output: $new_path" >&2
