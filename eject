@@ -3,7 +3,7 @@ set -euo pipefail
 
 _eject() {
   echo "Ejecting $dir."
-  if [[ "$(uname)" = "Darwin" ]]; then
+  if [[ "$OSTYPE" == "darwin"* ]]; then
     sudo diskutil umount "$dir"
   elif [[ -x /usr/bin/eject ]]; then
     sudo /usr/bin/eject "$dir"
