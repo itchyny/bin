@@ -3,7 +3,7 @@ set -u
 
 if [[ $# -eq 0 ]]; then
   exit 0
-elif [[ "$1" =~ github|\.git$ && ! "$1" =~ github\.io|raw\.github\.com|githubusercontent ]]; then
+elif [[ "$1" =~ github|\.git$ && ! "$1" =~ github\.io|raw\.github\.com|githubusercontent|/releases/download/ ]]; then
   git clone "$1"
 elif command -v curl &>/dev/null; then
   curl -ORLk "$1"
