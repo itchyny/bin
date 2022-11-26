@@ -33,9 +33,13 @@ if ( set +x; command -v rustup ) &>/dev/null; then
 fi
 
 if ( set +x; command -v stack ) &>/dev/null; then
-  stack update
-  stack upgrade
-  stack clean
+  if ( set +x; command -v ghcup ) &>/dev/null; then
+    ghcup upgrade
+  else
+    stack update
+    stack upgrade
+    stack clean
+  fi
 fi
 
 if ( set +x; command -v zinit ) &>/dev/null; then
