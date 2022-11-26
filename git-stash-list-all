@@ -3,6 +3,6 @@ set -euo pipefail
 
 while read -r line; do
   echo "! ${(r(78)(=))line/:*/ }"
-  git show "${line/:*/}"
+  git stash show -aw "${line/:*/}"
   echo
 done < <(git stash list)
