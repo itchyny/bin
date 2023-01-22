@@ -1,7 +1,4 @@
 #!/bin/bash
 
-if [[ "$#" -eq 0 ]]; then
-  exec git commit -a --amend
-else
-  exec git commit -a --amend -m "$(IFS=" "; echo "$*")"
-fi
+# shellcheck disable=SC2048
+exec git commit -a --amend ${*:+-m "$*"}
