@@ -1,24 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-_eject() {
-  echo "Ejecting $dir."
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    sudo diskutil umount "$dir"
-  elif [[ -x /usr/bin/eject ]]; then
-    sudo /usr/bin/eject "$dir"
-  fi
-}
-
-if [[ $# -eq 0 ]]; then
-  shopt -s nullglob
-  for dir in /media/* /media/"$USER"/* /Volumes/*; do
-    if [[ "$(readlink "$dir")" != "/" && "$dir" != "/media/$USER" && "$dir" != "/Volumes/Preboot" ]]; then
-      _eject "$dir"
+shopt -s nullglob
+(($# == 0)) && set -- /media/* /media/"$USER"/* /Volumes/*
+for dir in "$@"; do
+  if [[ "$(readlink "$dir")" != "/" && "$dir" != "/media/$USER" && "$dir" != "/Volumes/Preboot" ]]; then
+    echo "Ejecting $dir."
+    if [[ "$OSTYPE" == darwin* ]]; then
+      sudo diskutil umount "$dir"
+    elif [[ -x /usr/bin/eject ]]; then
+      sudo /usr/bin/eject "$dir"
     fi
-  done
-else
-  for dir in "$@"; do
-    _eject "$dir"
-  done
-fi
+  fi
+done
