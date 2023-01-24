@@ -7,7 +7,7 @@ abort() {
 }
 
 if [[ "$#" -eq 0 ]]; then
-  abort "service name required"
+  abort "service name is required"
 fi
 
 if [[ -z "${MACKEREL_APIKEY:-}" ]]; then
@@ -15,30 +15,15 @@ if [[ -z "${MACKEREL_APIKEY:-}" ]]; then
 fi
 
 service="service=$1"
-shift
+roles="$(printf '&role=%s' "${@:2}")"
+statuses="$(printf '&status=%s' working standby)"
 
-roles=""
-for role in "$@"; do
-  roles="$roles&role=$role"
-done
-
-status="&status=working&status=standby"
-
-cache=~/.cache/role/$service$(tr '&' '_' <<< "$roles").json
+cache=~/.cache/role/$service${roles//&/_}.json
 mkdir -p "${cache%/*}"
 
-response=$(\
-  curl -s \
-    -H "X-Api-Key: $MACKEREL_APIKEY" \
-    -X GET "https://api.mackerelio.com/api/v0/hosts?$service$roles$status"\
-)
-if [[ "$response" == *'"error":'* ]]; then
-  echo "$response" >&2
-  if [ -e "$cache" ]; then
-    jq -M -r ".hosts[].name" < "$cache"
-    exit 0
-  fi
-  exit 1
-fi
-
-tee "$cache" <<< "$response" | jq -M -r ".hosts[].name"
+if response="$(curl -sSf -H "X-Api-Key: $MACKEREL_APIKEY" \
+  "https://api.mackerelio.com/api/v0/hosts?$service$roles$statuses")"; then
+  tee "$cache" <<<"$response"
+elif [[ -f "$cache" ]]; then
+  cat "$cache"
+fi | jq -M -r ".hosts[].name"
