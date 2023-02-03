@@ -1,8 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-shopt -s nullglob
-(($# == 0)) && set -- /media/* /media/"$USER"/* /Volumes/*
+if (($# == 0)); then
+  shopt -s nullglob
+  set -- /media/* /media/"$USER"/* /Volumes/*
+fi
+
 for dir in "$@"; do
   if [[ "$(readlink "$dir")" != "/" && "$dir" != "/media/$USER" && "$dir" != "/Volumes/Preboot" ]]; then
     echo "Ejecting $dir."
