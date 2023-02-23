@@ -5,37 +5,35 @@ abort() {
   exit 1
 }
 
-if [[ $# -ne 3 ]]; then
+if (($# < 3)); then
   abort "specify low, high, script (% is replaced)"
 fi
 
-low="$1"
-high="$2"
-script="$3"
+low=$1
+high=$2
+script=${*:3}
 
-if [[ ! $low =~ ^-?[0-9]+$ ]]; then
+if [[ ! $low =~ ^[+-]?[0-9]+$ ]]; then
   abort "first argument should be an integer"
 fi
 
-if [[ ! $high =~ ^-?[0-9]+$ ]]; then
+if [[ ! $high =~ ^[+-]?[0-9]+$ ]]; then
   abort "second argument should be an integer"
 fi
 
-if [[ "$low" -ge "$high" ]]; then
+if ((low >= high)); then
   abort "first argument should be lower than second argument"
 fi
 
-bad="$high"
-while [[ "$low" -lt "$high" ]]; do
-  mid="$(((low + high) / 2))"
+while ((low < high)); do
+  mid=$((low + (high - low) / 2))
   if bash -c "${script//%/$mid}"; then
     echo "$mid: good"
-    low="$((mid + 1))"
+    low=$((mid + 1))
   else
     echo "$mid: bad"
-    high="$mid"
-    bad="$mid"
+    high=$mid
   fi
 done
 
-echo "$bad is the bad number"
+echo "$high is the bad number"
