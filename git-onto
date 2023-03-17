@@ -1,33 +1,14 @@
 #!/bin/bash
-set -eu
+set -euo pipefail
 
-branch-exists() {
-  git rev-parse "origin/$1" &>/dev/null
-}
-
-rebase-onto() {
-  git rebase --onto "origin/$1" "$(git log --merges --oneline -1 --format=%H)"
-}
-
-has_diff=$(git diff --ignore-submodules | grep -q '^' || echo 1)
-
-if test -z "$has_diff"; then
-  git stash
-fi
-
-git fetch
-
-if branch-exists develop; then
-  rebase-onto develop
-elif branch-exists staging; then
-  rebase-onto staging
-elif branch-exists master; then
-  rebase-onto master
-else
-  echo "Unknown main branch: cannot find develop, staging and master" >/dev/stderr
+if [[ $# -ne 1 ]]; then
+  echo "${BASH_SOURCE[0]##*/}: specify base branch" >&2
   exit 1
 fi
 
-if test -z "$has_diff"; then
-  git stash pop
+if ! git diff-index --quiet --ignore-submodules HEAD; then
+  git stash
+  trap 'git stash pop' EXIT
 fi
+
+git rebase --onto "$1" "$(git merge-base "$1" HEAD)"
