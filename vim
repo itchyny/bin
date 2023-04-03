@@ -11,7 +11,7 @@ fi
 if [ -t 0 ]; then
   exec $vim "$@" < /dev/tty
 elif [ -t 1 ]; then
-  f=$(mktemp -t vim)
+  f=$(mktemp)
   cat /dev/stdin > "$f"
   $vim "$f" < /dev/tty
   exit_code=$?
