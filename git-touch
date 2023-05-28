@@ -6,9 +6,6 @@ command -v gdate &>/dev/null && date() { gdate "$@"; }
 while IFS= read -r -d '' file; do
   logtime=$(git log -1 --format=%ci "$file")
   mtime=$(date -d "$logtime" +%Y%m%d%H%M.%S)
-  if [ "$mtime" == "X" ]; then
-    exit 1
-  fi
   printf "%-80s\t%s\t%s\n" "$file" "$logtime" "$mtime"
   touch -t "$mtime" "$file"
 done < <(git ls-files -z)
