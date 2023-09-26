@@ -1,4 +1,8 @@
 #!/bin/bash
+test -t 1 && exec \
+  1> >(sed -u '/^\./s/^/'$'\e''[34m/; /^\*/s/^/'$'\e''[35m/;
+               /^[><c]/s/^/'$'\e''[36m/; s/$/'$'\e''[0m/' >&1) \
+  2> >(sed -u 's/^/'$'\e''[90m/; s/$/'$'\e''[0m/' >&2)
 set -euxo pipefail
 
 src=~/Dropbox
@@ -12,5 +16,5 @@ fi
 shopt -s nullglob
 for target in /media/*/Dropbox /media/"$USER"/*/Dropbox /Volumes/*/Dropbox; do
   echo "Start backup from $src to $target."
-  rsync -av --delete "$src/" "$target/"
+  rsync -av --delete --itemize-changes "$src/" "$target/"
 done
