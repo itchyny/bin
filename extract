@@ -70,7 +70,7 @@ popd &>/dev/null
 
 shopt -s nullglob dotglob
 files=("$dir"/*)
-if [[ "${#files[@]}" -eq 1 ]] && [[ "${files[0]##*/}" == "${name%"$suffix"}" ]]; then
+if [[ "${#files[@]}" -eq 1 && "${files[0]##*/}" == "${name%"$suffix"}" ]]; then
   path="${files[0]}"
   new_path="$(basename -- "$path")"
   i=0
@@ -79,6 +79,8 @@ if [[ "${#files[@]}" -eq 1 ]] && [[ "${files[0]##*/}" == "${name%"$suffix"}" ]];
     new_path="${prefix}_$((++i))"
   done
   mv -- "$path" "$new_path"
+elif [[ "${#files[@]}" -eq 0 ]]; then
+  new_path="$name"
 else
   new_path="$(basename -- "$target_abspath" "$suffix")"
   i=0
