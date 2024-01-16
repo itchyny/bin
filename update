@@ -19,7 +19,7 @@ if ( set +x; command -v brew ) &>/dev/null; then
       brew unpin vim
     fi
   fi
-  brew upgrade --ignore-pinned
+  brew upgrade
   brew cleanup -s
   brew doctor
 fi
