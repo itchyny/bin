@@ -11,7 +11,7 @@ fi
 
 low=$1
 high=$2
-script=${*:3}
+script=("${@:3}")
 
 if [[ ! $low =~ ^[+-]?[0-9]+$ ]]; then
   abort "first argument should be an integer"
@@ -27,7 +27,7 @@ fi
 
 while ((low < high)); do
   mid=$((low + (high - low) / 2))
-  if bash -c "${script//%/$mid}"; then
+  if "${script[@]//%/$mid}"; then
     echo "$mid: good"
     low=$((mid + 1))
   else
