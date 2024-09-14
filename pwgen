@@ -1,3 +1,4 @@
 #!/bin/bash
 
-env LC_ALL=C tr -cd '1-9A-HJ-NP-Za-km-z' </dev/urandom | head -c "${1:-24}"
+env LC_ALL=C tr -cd '1-9A-HJ-NP-Za-km-z' </dev/urandom |
+  head -c "${1:-24}" | sed -E 's/.{6}/&-/g; s/-$//'
