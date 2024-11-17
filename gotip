@@ -3,6 +3,12 @@ set -euo pipefail
 
 NAME="${0##*/}"
 GO="$(go env GOPATH)/bin/$NAME"
+
+if find "$GO" -mtime +1w -delete -print \
+  2>/dev/null | grep ^ >/dev/null; then
+  rm -rf ~/.share/sdk
+fi
+
 if [[ ! -x "$GO" ]]; then
   go install "golang.org/dl/$NAME@latest"
 fi
