@@ -1,20 +1,16 @@
 #!/bin/bash
+shopt -s nullglob
 test -t 1 && exec \
   1> >(LC_ALL=C sed -u '/^\./s/^/'$'\e''[34m/; /^\*/s/^/'$'\e''[35m/;
                /^[><c]/s/^/'$'\e''[36m/; s/$/'$'\e''[0m/' >&1) \
   2> >(LC_ALL=C sed -u 's/^/'$'\e''[90m/; s/$/'$'\e''[0m/' >&2)
 set -euxo pipefail
 
-src=~/Dropbox
-if [[ ! -d "$src" ]]; then
-  src=~/Documents/Dropbox
-  if [[ ! -d "$src" ]]; then
-    exit 1
-  fi
-fi
-
-shopt -s nullglob
-for target in /media/*/Dropbox /media/"$USER"/*/Dropbox /Volumes/*/Dropbox; do
-  echo "Start backup from $src to $target."
-  rsync -av --delete --itemize-changes "$src/" "$target/"
+for src in ~/Dropbox ~/Documents; do
+  for target in /Volumes/*/"${src##*/}" /media/"$USER"/*/"${src##*/}"; do
+    if [[ $(realpath "${target%/*}") != "/" ]]; then
+      echo "Start backup from $src to $target."
+      rsync -av --delete --itemize-changes "$src/" "$target/"
+    fi
+  done
 done
