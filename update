@@ -21,7 +21,6 @@ if ( set +x; command -v brew ) &>/dev/null; then
   fi
   brew upgrade
   brew cleanup -s
-  brew doctor
 fi
 
 if ( set +x; command -v miv ) &>/dev/null; then
