@@ -25,6 +25,16 @@ if ((low >= high)); then
   abort "first argument should be lower than second argument"
 fi
 
+if ! "${script[@]//%/$low}"; then
+  abort "script should succeed for low ($low)"
+fi
+echo "$low: good"
+
+if "${script[@]//%/$high}"; then
+  abort "script should fail for high ($high)"
+fi
+echo "$high: bad"
+
 while ((low < high)); do
   mid=$((low + (high - low) / 2))
   if "${script[@]//%/$mid}"; then
